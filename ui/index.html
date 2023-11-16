@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TELEGRAM Control panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="container" style="max-width: 600px; box-shadow: 0px 5px 10px rgb(192 192 192 / 70%); padding: 20px;">
+
+          <nav class="navbar bg-body-tertiary mb-1">
+            <div class="container-fluid">
+              <span class="navbar-brand mb-0 h1">TELEGRAM Control panel</span>
+              <a href="/logout" class="btn btn-danger ms-auto">Exit</a>
+            </div>
+          </nav>
+
+
+    <form method="post" action="/send-message">
+        <div class="mb-3">
+          <label for="message_type" class="form-label">Message Type</label>
+          <select class="form-select" id="message_type" name="message_type">
+            <option value="text">Text</option>
+            <option value="photo">Photo</option>
+            <option value="poll">Poll</option>
+            <option value="button">Button</option>
+          </select>
+        </div>
+      <div class="mb-3">
+        <label for="message" class="form-label">Message</label>
+        <div class="input-group">
+          <textarea class="form-control w-100 mb-2" id="message" name="message" rows="10"></textarea>
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="bold-button"><b>Bold</b></button>
+            <button class="btn btn-outline-secondary" type="button" id="italic-button"><i>Italic</i></button>
+            <button class="btn btn-outline-secondary" type="button" id="strike-button"><s>Strike</s></button>
+            <button class="btn btn-outline-secondary" type="button" id="under-button"><u>Underline</u></button>
+            <button class="btn btn-outline-secondary" type="button" id="monospace-button"><code>monospace</code></button>
+            <button class="btn btn-outline-secondary" type="button" id="link-button">Link</button>
+          </div>
+        </div>
+      </div>
+
+        <div class="mb-3">
+          <label for="photo_url" class="form-label">Photo URL</label>
+          <input type="url" class="form-control" id="photo_url" name="photo_url">
+        </div>
+      
+        <div class="mb-3">
+          <label for="caption" class="form-label">Caption</label>
+          <input type="text" class="form-control" id="caption" name="caption">
+        </div>
+      
+        <div class="mb-3">
+          <label for="question" class="form-label">Question</label>
+          <textarea class="form-control" id="question" name="question"></textarea>
+        </div>
+      
+        <div class="mb-3">
+          <label for="options" class="form-label">Options</label>
+          <textarea class="form-control" id="options" name="options" rows="8"></textarea>
+          <div class="form-text">Enter each option on a new line.</div>
+        </div>
+      
+        <div class="mb-3">
+          <label for="button_text" class="form-label">Button Text</label>
+          <input type="text" class="form-control" id="button_text" name="button_text">
+        </div>
+        
+        <div class="mb-3">
+          <label for="button_url" class="form-label">Button URL</label>
+          <input type="text" class="form-control" id="button_url" name="button_url">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+
+      <div class="modal" tabindex="-1" role="dialog" id="link-modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Insert Link</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="link-url">URL</label>
+                <input type="text" class="form-control" id="link-url" name="link-url" placeholder="Enter URL">
+              </div>
+              <div class="form-group">
+                <label for="link-text">Link Text</label>
+                <input type="text" class="form-control" id="link-text" name="link-text" placeholder="Enter Link Text">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="insert-link-button">Insert Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+      </div>
+    </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+ <script>
+const messageTypeSelect = document.querySelector('#message_type');
+
+const messageInput = document.querySelector('#message').parentNode;
+const photoUrlInput = document.querySelector('#photo_url').parentNode;
+const captionInput = document.querySelector('#caption').parentNode;
+const questionInput = document.querySelector('#question').parentNode;
+const optionsInput = document.querySelector('#options').parentNode;
+const buttonTextInput = document.querySelector('#button_text').parentNode;
+const buttonUrlInput = document.querySelector('#button_url').parentNode;
+
+function hideInputs() {
+  messageInput.style.display = 'none';
+  photoUrlInput.style.display = 'none';
+  captionInput.style.display = 'none';
+  questionInput.style.display = 'none';
+  optionsInput.style.display = 'none';
+  buttonTextInput.style.display = 'none';
+  buttonUrlInput.style.display = 'none';
+}
+
+function showMessageInputs() {
+  hideInputs();
+  messageInput.style.display = 'block';
+}
+
+function showPhotoInputs() {
+  hideInputs();
+  messageInput.style.display = 'block';
+  photoUrlInput.style.display = 'block';
+}
+
+function showPollInputs() {
+  hideInputs();
+  questionInput.style.display = 'block';
+  optionsInput.style.display = 'block';
+}
+
+function showButtonInputs() {
+  hideInputs();
+  messageInput.style.display = 'block';
+  buttonTextInput.style.display = 'block';
+  buttonUrlInput.style.display = 'block';  
+}
+
+hideInputs();
+
+switch (messageTypeSelect.value) {
+  case 'text':
+    showMessageInputs();
+    break;
+
+  case 'photo':
+    showPhotoInputs();
+    break;
+
+  case 'poll':
+    showPollInputs();
+    break;
+
+  case 'button':
+    showButtonInputs();
+    break;    
+
+  default:
+    break;
+}
+
+messageTypeSelect.addEventListener('change', function() {
+  switch (this.value) {
+    case 'text':
+      showMessageInputs();
+      break;
+
+    case 'photo':
+      showPhotoInputs();
+      break;
+
+    case 'poll':
+      showPollInputs();
+      break;
+
+    case 'button':
+      showButtonInputs();
+      break;          
+
+    default:
+      break;
+  }
+});
+
+$(document).ready(function() {
+  $('#bold-button').click(function() {
+    var message = $('#message');
+    var start = message[0].selectionStart;
+    var end = message[0].selectionEnd;
+    var text = message.val();
+    message.val(text.slice(0, start) + '<b>' + text.slice(start, end) + '</b>' + text.slice(end));
+  });
+
+  $('#italic-button').click(function() {
+    var message = $('#message');
+    var start = message[0].selectionStart;
+    var end = message[0].selectionEnd;
+    var text = message.val();
+    message.val(text.slice(0, start) + '<i>' + text.slice(start, end) + '</i>' + text.slice(end));
+  });
+
+  $('#strike-button').click(function() {
+    var message = $('#message');
+    var start = message[0].selectionStart;
+    var end = message[0].selectionEnd;
+    var text = message.val();
+    message.val(text.slice(0, start) + '<s>' + text.slice(start, end) + '</s>' + text.slice(end));
+  });
+
+  $('#under-button').click(function() {
+    var message = $('#message');
+    var start = message[0].selectionStart;
+    var end = message[0].selectionEnd;
+    var text = message.val();
+    message.val(text.slice(0, start) + '<u>' + text.slice(start, end) + '</u>' + text.slice(end));
+  });
+
+  $('#monospace-button').click(function() {
+    var message = $('#message');
+    var start = message[0].selectionStart;
+    var end = message[0].selectionEnd;
+    var text = message.val();
+    message.val(text.slice(0, start) + '<code>' + text.slice(start, end) + '</code>' + text.slice(end));
+  });
+
+  $('#link-button').click(function() {
+    $('#link-modal').modal('show');
+  });
+
+  $('#insert-link-button').click(function() {
+    var message = $('#message');
+    var start = message[0].selectionStart;
+    var end = message[0].selectionEnd;
+    var text = message.val();
+    var url = $('#link-url').val();
+    message.val(text.slice(0, start) + '<a href="' + url + '">' + text.slice(start, end) + '</a>' + text.slice(end));
+    $('#link-modal').modal('hide');
+  }); 
+});
+</script>    
+</body>
+</html>

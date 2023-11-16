@@ -1,0 +1,7 @@
+User-agent: *
+Crawl-delay: 10
+          								
+Disallow: /f3             
+Disallow: /core            
+Disallow: /lib
+Disallow: /tmp

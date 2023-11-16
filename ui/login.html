@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TELEGRAM Control panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="container" style="max-width: 490px;">
+          <nav class="navbar bg-body-tertiary mb-1">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="{{ @photo }}" alt="{{ @title }}" width="30" height="30">
+              </a> 
+              <span class=""><b>{{ @title }}</b></span>   
+              <span class="visually-hidden">{{ @description}}</span>   
+              <span class="visually-hidden">{{ @id}}</span>       
+            </div>
+          </nav>
+          <h1>TELEGRAM Control panel</h1>
+          <form method="post" action="/login" class="needs-validation" novalidate>
+            <div class="form-floating mb-3">
+              <input type="text" name="username" id="username" class="form-control" required>
+              <label for="username">Username</label>
+              <div class="invalid-feedback">
+                Please enter a username.
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="password" name="password" id="password" class="form-control" required>
+              <label for="password">Password</label>
+              <div class="invalid-feedback">
+                Please enter a password.
+              </div>
+            </div>
+            <check if="{{ @error !== '' }}">
+                <div class="alert alert-danger" role="alert">
+                  {{ @error }}
+                </div>
+             </check>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+      </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+
